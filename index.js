@@ -4,7 +4,7 @@ const Proxy     = require('./lib/proxy.js'),
 //// 3 calls pre second, and max waiting time is 1 minute.
 const proxy     = new Proxy(3, 1, 60);
 const app       = express();
-const port      = 8005;
+const port      = 80;
 
 app.get('/remaining', function (req, res) {
     var remaining = proxy.getRemaining();
