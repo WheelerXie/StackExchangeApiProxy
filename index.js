@@ -1,12 +1,12 @@
-const express   = require('express'),
-const Proxy     = require('./lib/proxy.js'),
+const express   = require('express');
+const Proxy     = require('./lib/proxy.js');
 
 //// 3 calls pre second, and max waiting time is 1 minute.
 const proxy     = new Proxy(3, 1, 60);
 const app       = express();
 const port      = 80;
 
-app.get('/remaining', function (req, res) {
+app.get('/', function (req, res) {
     var remaining = proxy.getRemaining();
     if (remaining && remaining.quota > 0) {
         res.setHeader('Content-Type', 'application/json');
@@ -16,7 +16,12 @@ app.get('/remaining', function (req, res) {
     }
 });
 app.get('*', function (req, res) {
-    proxy.get(req, res);
+    var remaining = proxy.getRemaining();
+    if (remaining && remaining.quota > 0) {
+        proxy.get(req, res);
+    } else {
+        res.status(429).send('Quota has run out.');
+    }
 });
 
 var server = app.listen(port, function () {

@@ -1,0 +1,21 @@
+#!/bin/bash
+# chkconfig: - 50 50
+# description: seapiproxy
+RETVAL=0
+usage ()
+{
+        echo $"Usage: $0 {start}" 1>&2
+        RETVAL=2
+}
+
+start ()
+{
+        node /lib64/seapiproxy/index.js
+}
+
+case "$1" in
+    start) start ;;
+    *) usage ;;
+esac
+
+exit $RETVAL
